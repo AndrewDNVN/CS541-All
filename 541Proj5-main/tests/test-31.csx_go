@@ -1,0 +1,37 @@
+@@ Test 31
+ Created: Dec 2002; Modified Jun 2020
+
+ Check function calls with parameters:
+  Are the parameters properly scoped and accessed?
+
+@@
+
+package p31csx
+var x int;
+var y char;
+var n int;
+var fct int;
+
+func func1(x1 int) {
+    print "\n", "Function 1 entered";
+    print "X1 = (10?) ", x1;
+    print "\n", "Function 1 exited";
+} // func func1
+
+func func2(y1 char) {
+    print "\n", "Function 2 entered";
+    print " Y1 = (15?) ", y1;
+    print "\n", "Function 2 exited";
+} // func func2
+
+func main() {
+    print "Testing Program p31csx", "\n";
+    x = 10;
+    func1(x); //error 1
+    y = 'c';
+    func2(y);
+    print " X = (10?)", x, " Y = (15?) ", y, "\n";
+    print "Test completed", "\n";
+} // func main
+// package p31csx
+// vim:filetype=go:	

@@ -1,0 +1,61 @@
+@@ Test 19
+ Created: Dec 2002; Modified Jun 2020
+
+ Check that control flows correctly in complex nested if statements
+
+@@
+
+package p19csx
+func main() {
+    const cI1 = 1;
+    const cI9 = 9;
+    const cbt = true;
+    const cbf = false;
+    var vI1 int;
+    var vI9 int;
+    var vbt bool;
+    var vbf bool;
+    var flowcount int;
+    print "Testing Program p19csx\n";
+    vI1 = 1;
+    vI9 = 9;
+    vbt = true;
+    vbf = false;
+    flowcount = 0;
+    if cbf {
+        print "\n====> Wrong Control Flow 1\n";
+    }
+    if vbf || vbt {
+        flowcount = flowcount + 1;
+        if vbf != (vI1 != 1) {
+            print "===> Wrong Control Flow 2\n";
+            if 20 > 10 {
+                if cbf && (vI1 != 0) {
+                    print "\n ==> Wrong Control Flow 3\n";
+                } else {
+                    if vI9 < (cI1 - vI1) {
+                        print "\n===> Wrong Control Flow 4\n";
+                    }
+                }
+            } else {
+                print "\n===> Wrong Control Flow 5\n";
+            }
+        } else {
+            if true {
+                if (vI9 == 9) && (cbf != true) {
+                    flowcount = flowcount + 1;
+                } else {
+                    print "\n===> Wrong Flow Control 6\n";
+                }
+            } else {
+                print "\n==> Wrong Flow Control 7\n";
+            }
+        }
+    }
+    if flowcount != 2 {
+        print "\n ERROR : Incorrect paths followed, flowcount ", flowcount, "\n";
+    }
+    print "Test completed\n";
+} // func main
+// package p19csx
+// vim:filetype=go:	

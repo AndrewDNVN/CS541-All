@@ -1,0 +1,18 @@
+@@ Test 41
+  Created: Dec 2002; Modified Jun 2020
+
+ Check nested calls to functions
+
+@@
+
+package p41csx
+func sum(i int, j int, k int) int {
+    return (i + j) + k;
+} // func sum
+func main() {
+    print "Testing Program p41csx", "\n";
+    print "1+2+3+4+5+6+7 = ", sum(1, sum(2, 3, sum(4, 5, 6)), 7), "\n";
+    print "Test completed", "\n";
+} // func main
+// package p41csx
+// vim:filetype=go:	

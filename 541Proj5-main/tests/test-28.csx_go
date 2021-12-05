@@ -1,0 +1,27 @@
+@@ Test 28
+ Created: Dec 2002; Modified Jun 2020
+
+ Check functions calling other functions
+
+@@
+
+package p28csx
+func proc1() {
+    print "\n", "Function 1 entered";
+    print "\n", "Function 1 exited";
+} // func proc1
+func proc2() {
+    print "\n", "Function 2 entered";
+    proc1();
+    print "\n", "Function 2 exited";
+} // func proc2
+func main() {
+    var x int;
+    var y int;
+    print "Testing Program p28csx", "\n";
+    proc1();
+    proc2();
+    print "\nTest completed", "\n";
+} // func main
+// package p28csx
+// vim:filetype=go:	

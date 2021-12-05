@@ -1,0 +1,20 @@
+@@ Test 40
+  Created: Dec 2002; Modified Jun 2020
+
+ Check that function return values are properly protected after return
+
+@@
+
+package p40csx
+var x int;
+var y int;
+func echo(i int) int {
+    return i;
+} // func echo
+func main() {
+    print "Testing Program p40csx", "\n";
+    print "1+2+3+4 = ", echo(1 + (echo(2) + (echo(3) + echo(4)))), "\n";
+    print "Test completed", "\n";
+} // func main
+// package p40csx
+// vim:filetype=go:	
