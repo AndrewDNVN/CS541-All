@@ -1,0 +1,17 @@
+@@ Test 15
+ Created: Dec 2002; Modified Jun 2020
+
+  Test simple while loops
+@@
+
+package p15csx
+func main() {
+    var i = 0;
+    print "Testing program p15csx\n";
+    for i < 100 {
+		i = i + 1;
+    } // for
+    print "The value of i is ", i, "\n";
+} // func main
+// package p15csx
+// vim:filetype=go:	

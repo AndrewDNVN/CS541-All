@@ -1,0 +1,28 @@
+@@ Test 36
+  Created: Dec 2002; Modified Jun 2020
+
+ Let's try a Fibonacci sequence
+
+@@
+
+package p36csx
+var cnt int;
+const lim = 15;
+func fib(n int) int {
+    if n <= 1 {
+        return 1;
+    } else {
+        return fib(n - 1) + fib(n - 2);
+    }
+} // func fib
+func main() {
+    print "Testing Program p36csx", "\n";
+    cnt = 0;
+    for cnt <= lim {
+        print "Fibonacci of ", cnt, " is ", fib(cnt), "\n";
+        cnt = cnt + 1;
+    } // for
+    print "Test completed", "\n";
+} // func main
+// package p36csx
+// vim:filetype=go:	

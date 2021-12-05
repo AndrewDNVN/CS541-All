@@ -1,0 +1,26 @@
+@@ Test 35
+  Created: May 2013 Raphael Finkel; Modified Jun 2020
+
+  Checks for proper working of array parameter.
+
+@@
+
+package p35csx
+func recur(a []int, depth int) {
+    if depth > 0 {
+        print "depth is ", depth, '\n';
+        recur(a, depth - 1);
+    } else {
+        print a[0], a[1], '\n';
+    }
+} // func recur
+func main() {
+    var myArray int[2];
+    print "Testing Program p35csx\n";
+    myArray[0] = 10;
+    myArray[1] = 20;
+    recur(myArray, 10);
+    print "Test completed\n";
+} // func main
+// package p35csx
+// vim:filetype=go:	

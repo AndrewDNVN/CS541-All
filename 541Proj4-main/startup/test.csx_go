@@ -1,0 +1,331 @@
+@@ This is a small test of the parser.
+
+
+   Some testing @'s not left in.
+
+   @ @ 
+
+@@
+
+@@ By Andrew Donovan @@
+
+// test of externals
+
+package test // package
+
+// simple test of vars and constants
+// more later
+
+
+var test = 3; @@
+   This is a test of the multicomment mid line.
+@@
+
+var a int;        // normal var
+var b = 0;        // asigned var
+var c int [1];    // var array
+const d = 2;      // const int
+const j = true;   // const bool
+const k = false;  // const bool
+const l = 't';    // const charlit
+const m = "foo";  // const stringlit
+var jV = true;    // var bool
+var kV = false;   // var  bool
+var lV = 't';     // var charlit
+var mV = "foo";   // var stringlit
+var g bool;       // bool decl
+var h char;       // char decl
+
+
+func alpha () int {
+   // test of functions and return type
+};
+
+func bravo () char {
+   //small test of internals and return type
+   var e int;
+   var f = 3;
+
+   
+};
+
+func charlie (a int) bool {
+   //small test of formal, internals and return type
+   var e int;
+   var f = 3;
+   
+};
+
+func delta ( a int, b int) int{
+   //small test of formals, internals and return type
+   var e int;
+   var f = 3;
+};
+
+func echo () {
+   //small test of internals and no return type
+   var e int;
+   var f = 3;
+};
+
+func foxtrot (){
+   // test of edge of func only the name is given
+}
+
+func golf (c [] int){
+   //small test of an array formal and no return type
+};
+
+func hotel (a int, c [ ] int){
+   //small test of an array formal, an formal and no return type
+};
+
+func india (a int, c [ ] int) char{
+   //small test of an array formal, an formal and a return type
+};
+
+func juliett (a int, c [ ] int, d int) bool{
+   //small test of an array formal, formals and a return type
+};
+
+func kilo (a int, c [] int, d int) bool{
+   //small test of an array formal, formals, internals and a return type
+   var e int;
+   var f = 3;
+};
+
+func mike () {
+   // larger test of var decls
+   // using diffrent varible names to hopefully be able to use
+   // this test code in the future
+
+   var aM int;        // normal var
+   var bM = 0;        // asigned var
+   var cM int [1];    // var array
+   const dM = 2;      // const int
+   const jM = true;   // const bool
+   const kM = false;  // const bool
+   const lM = 't';    // const charlit
+   const mM = "foo";  // const stringlit
+   var jVM = true;    // var bool
+   var kVM = false;   // var  bool
+   var lVM = 't';     // var charlit
+   var mVM = "foo";   // var stringlit
+   var gM bool;       // bool decl
+   var hM char;       // char decl
+};
+
+func november (a int, b [ ] int) int{
+   // larger test of var decls and formals 
+   // using diffrent varible names to hopefully be able to use
+   // this test code in the future
+
+   var aN int;        // normal var
+   var bN = 0;        // asigned var
+   var cN int [1];    // var array
+   const dN = 2;      // const int
+   const jN = true;   // const bool
+   const kN = false;  // const bool
+   const lN = 't';    // const charlit
+   const mN = "foo";  // const stringlit
+   var jVN = true;    // var bool
+   var kVN = false;   // var  bool
+   var lVN = 't';     // var charlit
+   var mVN = "foo";   // var stringlit
+   var gN bool;       // bool decl
+   var hN char;       // char decl
+};
+
+func oscar (a int) int{
+   // testing if statment
+
+   if (a == 1) {
+      // simple internals
+      var e int;
+      var f = 3;
+   }
+};
+
+func papa (){
+   // testing if else
+
+   var a int;
+
+   if (b != 2){
+      var aN int;        // normal var
+      var bN = 0;        // asigned var
+      var cN int [1];    // var array
+      const dN = 2;      // const int
+      const jN = true;   // const bool
+      const kN = false;  // const bool
+      const lN = 't';    // const charlit
+      const mN = "foo";  // const stringlit
+      var jVN = true;    // var bool
+      var kVN = false;   // var  bool
+      var lVN = 't';     // var charlit
+      var mVN = "foo";   // var stringlit
+      var gN bool;       // bool decl
+      var hN char;       // char decl
+   }
+   else {
+      var aN int;        // normal var
+      var bN = 0;        // asigned var
+      var cN int [1];    // var array
+      const dN = 2;      // const int
+      const jN = true;   // const bool
+      const kN = false;  // const bool
+      const lN = 't';    // const charlit
+      const mN = "foo";  // const stringlit
+      var jVN = true;    // var bool
+      var kVN = false;   // var  bool
+      var lVN = 't';     // var charlit
+      var mVN = "foo";   // var stringlit
+      var gN bool;       // bool decl
+      var hN char;       // char decl
+   }
+
+
+};
+
+func quebec (g bool) char {
+   // testing for loop 
+
+   for (a <= 2){
+      // simple internals
+      var e int;
+      var f = 3;
+   } 
+};
+
+func romeo () bool {
+   // testing for loop with if else in side
+   // more than one layer
+
+   for (a <= 2){
+      
+         if (b != 2){
+            var aN int;        // normal var
+            var bN = 0;        // asigned var
+            var cN int [1];    // var array
+            const dN = 2;      // const int
+            const jN = true;   // const bool
+            const kN = false;  // const bool
+            const lN = 't';    // const charlit
+            const mN = "foo";  // const stringlit
+            var jVN = true;    // var bool
+            var kVN = false;   // var  bool
+            var lVN = 't';     // var charlit
+            var mVN = "foo";   // var stringlit
+            var gN bool;       // bool decl
+            var hN char;       // char decl
+
+            if (c >= f){
+               var a = "This is a lot of tabs.";
+
+               d = c;
+            }
+
+            else {
+               // testing the name func;
+               e = c;
+
+               if (g <= j){
+                  // more layers
+                  g = true;
+               }
+            }
+      };
+      
+      else {
+         var aN int;        // normal var
+         var bN = 0;        // asigned var
+         var cN int [1];    // var array
+         const dN = 2;      // const int
+         const jN = true;   // const bool
+         const kN = false;  // const bool
+         const lN = 't';    // const charlit
+         const mN = "foo";  // const stringlit
+         var jVN = true;    // var bool
+         var kVN = false;   // var  bool
+         var lVN = 't';     // var charlit
+         var mVN = "foo";   // var stringlit
+         var gN bool;       // bool decl
+         var hN char;       // char decl
+      };
+   
+   }; 
+   
+};
+
+func sierra () int {
+  
+   // more statment testing
+
+   read a;
+   read a, b;
+
+   print a == 1;
+   print b == 2, c!=3;
+
+};
+
+func tango () int {
+  // expr to unary testing lite
+
+  a (b && v);
+
+  a (b || v);
+
+  a (b < v);
+
+  a (b > v);
+
+  a (c <= v);
+
+  a (c >= v);
+
+  a (c == v);
+
+  a (a != v);
+
+  a (a + B);
+
+  a (a - B);
+
+  a (a * B);
+
+  a (a / B);
+
+  a (! B);
+
+};
+
+func uniform () bool {
+   // unit testing 
+
+   a (int (1 || b));
+
+
+   // precdence testing
+   D = a+b*c;
+
+   E = a-b/c;
+
+   F = a*b-c;
+
+   G = (a==b*C||d<=e-f);
+
+   a ('d');
+
+   b ("This is a test.");
+
+   c (~1);
+
+   c (42); // intresting book
+
+};
+
+
+func main (){
+   
+};

@@ -1,0 +1,26 @@
+@@ Test 26
+ Created: Dec 2002; Modified Jun 2020
+
+ Check  simple parameterless procedures
+
+@@
+
+package p26csx
+func proc1() {
+    print "\n", "Procedure 1 entered";
+    print "\n", "Procedure 1 exited";
+} // func proc1
+func proc2() {
+    print "\n", "Procedure 2 entered";
+    print "\n", "Procedure 2 exited";
+} // func proc2
+func main() {
+    var x int;
+    var y int;
+    print "Testing Program p26csx", "\n";
+    proc1();
+    proc2();
+    print "\n", "Test completed", "\n";
+} // func main
+// package p26csx
+// vim:filetype=go:	

@@ -1,0 +1,16 @@
+@@ Test 05
+ Created: Dec 2002; Modified Jun 2020
+
+ Checks for global constants
+@@
+
+package p05csx
+func main() {
+    const i1 = 123;
+    const i2 = false;
+    print "Testing program p05csx\n";
+    print "i1 = ", i1, "\n";
+    print "i2 = ", i2, "\n";
+} // func main
+// package p05csx
+// vim:filetype=go:	

@@ -1,0 +1,30 @@
+@@ Test 07
+ Created: Dec 2002; Modified Jun 2020
+
+  Test proper operation of operators for integer values
+@@
+
+package p07csx
+func main() {
+    var i1 int;
+    var i2 int;
+    var i3 int;
+    var i4 int;
+    var i5 int;
+    var i6 int;
+    var i7 int;
+    var i8 int;
+    print "Testing program p07csx\n";
+    i1 = 10;
+    i2 = ~20;
+    i3 = i1 * i2;
+    i4 = (i3 / i1) + 1;
+    i5 = ((i1 - 1) / i1) + 1;
+    i6 = (((((1 + 4) - 3) - 2) - 1) - ~10) + ~9;
+    i7 = i4 - i2;
+    i8 = i3 / i2;
+    print i1, "\t", i2, "\t", i3, "\t", i4, "\n", i5, "\t", i6, "\t", i7, "\t",
+        i8, "\n";
+} // func main
+// package p07csx
+// vim:filetype=go:	

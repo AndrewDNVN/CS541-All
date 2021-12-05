@@ -1,0 +1,56 @@
+@@ Test 43
+	Created: May 2013 Raphael Finkel; Modified Jun 2020
+
+	Tests array behavior
+
+@@
+
+package p43csx
+var a int[1];
+var b bool[1];
+var c char[1];
+func main() {
+    var aa int[1];
+    var bb bool[1];
+    var cc char[1];
+    print "Testing Program p43csx", "\n";
+    a[0] = 3;
+    aa[0] = 4;
+    b[0] = false;
+    bb[0] = true;
+    c[0] = 'a';
+    cc[0] = 'b';
+    {
+        aa = a;
+        print "should be 3: ", aa[0], '\n';
+        bb = b;
+        print "should be false: ", bb[0], '\n';
+        cc = c;
+        print "should be a: ", cc[0], '\n';
+    }
+    {
+        aa[0] = 5;
+        print "should be 3: ", a[0], '\n';
+        bb[0] = true;
+        print "should be false: ", b[0], '\n';
+        cc[0] = 'c';
+        print "should be a: ", c[0], '\n';
+    }
+    {
+        a = aa;
+        print "should be 5: ", a[0], '\n';
+        aa[0] = 6;
+        print "should be 5: ", a[0], '\n';
+    }
+    {
+        c[0] = 'h';
+        print "should be h: ", c, '\n';
+    }
+    {
+        c = "i";
+        print "should be i: ", c, '\n';
+    }
+    print "Test completed", "\n";
+} // func main
+// package p43csx
+// vim:filetype=go:	

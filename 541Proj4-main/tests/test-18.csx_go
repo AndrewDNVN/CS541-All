@@ -1,0 +1,27 @@
+@@ Test 18
+ Created: Dec 2002; Modified Jun 2020
+
+  Checks for proper working of input/output statements
+   (used by all test programs)
+
+ Assume input is: -5, -13, 20
+@@
+
+package p18csx
+func main() {
+    var x int;
+    var y int;
+    var z int;
+    print "Testing Program p18csx\n";
+    read x, y, z;
+    if ((x != ~5) || (y != ~13)) || (z != 20) {
+        print "\nERROR: Read error\n";
+    }
+    x = 1000;
+    y = 2000;
+    z = 3000;
+    print "Testing print:  Output is ", x, z, y, "\n";
+    print "Test completed\n";
+} // func main
+// package p18csx
+// vim:filetype=go:	
