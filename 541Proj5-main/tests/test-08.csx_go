@@ -1,0 +1,35 @@
+@@ Test 08
+ Created: Dec 2002; Modified Jun 2020
+
+  Test proper working of operators for boolean values
+@@
+
+package p08csx
+func main() {
+    var b1 bool;
+    var b2 bool;
+    var b3 bool;
+    var b4 bool;
+    var b5 bool;
+    var b6 bool;
+    var b7 bool;
+    var b8 bool;
+    print "Testing program p08csx\n";
+    b1 = true;
+    b2 = false;
+    b3 = b1 && b1;
+    b4 = b2 && b2;
+    b5 = b1 && b2;
+    b6 = b2 && b1;
+    print b1, "\t", b2, "\n", b3, "\t", b4, "\t", b5, "\t", b6, "\n";
+    b3 = b1 || b1;
+    b4 = b2 || b2;
+    b5 = b1 || b2;
+    b6 = b2 || b1;
+    print b1, "\t", b2, "\n", b3, "\t", b4, "\t", b5, "\t", b6, "\n";
+    b3 = !b1;
+    b4 = !b2;
+    print b1, "\t", b2, "\t", b3, "\t", b4, "\n";
+} // func main
+// package p08csx
+// vim:filetype=go:	

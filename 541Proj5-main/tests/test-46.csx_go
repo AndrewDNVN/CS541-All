@@ -1,0 +1,16 @@
+@@ Test 45
+  Created: Jun 2020 Raphael Finkel
+
+ Check variables initialized to expressions
+
+@@
+
+package p46csx
+func main() {
+	var a = 3 - 1;
+	var b = true || a == a;
+	var c = a+1;
+	print a+a, " ", b, " ", c, "\n";
+} // main
+// package p46csx
+// vim:filetype=go:	

@@ -1,0 +1,27 @@
+@@ Test 32
+ Created: Dec 2002; Modified Jun 2020
+
+ Check recursive function calls using you-know-what
+
+@@
+
+package p32csx
+var cnt int;
+func fac(n int) int {
+    if n <= 1 {
+        return 1;
+    } else {
+        return fac(n - 1) * n;
+    }
+} // func fac
+func main() {
+    print "Testing Program p32csx", "\n";
+    cnt = 1;
+    for cnt <= 9 {
+        print "Factorial of ", cnt, " is ", fac(cnt), "\n";
+        cnt = cnt + 1;
+    } // for
+    print "Test completed", "\n";
+} // func main
+// package p32csx
+// vim:filetype=go:	

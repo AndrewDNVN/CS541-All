@@ -1,0 +1,21 @@
+@@ Test 42
+  Created: Dec 2002; Modified Jun 2020
+
+ Test that parameters of caller can be properly accessed during a call
+
+@@
+
+package p42csx
+func sum(i int, j int) int {
+    return i + j;
+} // func sum
+func plus1(k int) int {
+    return sum(1, k);
+} // func plus1
+func main() {
+    print "Testing Program p42csx", "\n";
+    print "100+1 = ", plus1(100), "\n";
+    print "Test completed", "\n";
+} // func main
+// package p42csx
+// vim:filetype=go:	

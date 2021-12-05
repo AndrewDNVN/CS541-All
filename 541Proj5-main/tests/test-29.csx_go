@@ -1,0 +1,31 @@
+@@ Test 29
+ Created: Dec 2002; Modified Jun 2020
+
+  Check scoping and local variable access
+
+@@
+
+package p29csx
+var x int;
+var y int;
+var z int;
+func local1() {
+    const x = 10;
+    const y = 20;
+    var z int;
+    print "In function local1: Expecting 10 and 20\n";
+    print "   X = ", x, "   Y = ", y, "\n";
+    z = 10000;
+} // func local1
+func main() {
+    print "Testing Program p29csx\n";
+    x = 100;
+    y = 200;
+    z = ~1;
+    print " X = ", x, " Y = ", y, " Z = ", z, "\n";
+    local1();
+    print " X = ", x, " Y = ", y, " Z = ", z, "\n";
+    print "Test completed\n";
+} // func main
+// package p29csx
+// vim:filetype=go:	

@@ -1,0 +1,29 @@
+@@ Test 30
+ Created: Dec 2002; Modified Jun 2020
+
+ Check recursive parameterless procedure calls
+ (using factorial, of course)
+@@
+
+package p30csx
+var n int;
+var fact int;
+func factorial() {
+    if n == 0 {
+        fact = 1;
+    } else {
+        n = n - 1;
+        factorial();
+        n = n + 1;
+        fact = fact * n;
+    }
+} // func factorial
+func main() {
+    print "Testing Program p30csx", "\n";
+    n = 6;
+    factorial();
+    print "\n", "Factorial of ", n, " is ", fact, "\n";
+    print "Test completed", "\n";
+} // func main
+// package p30csx
+// vim:filetype=go:	

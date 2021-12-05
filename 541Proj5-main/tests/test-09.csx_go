@@ -1,0 +1,36 @@
+@@ Test 09
+ Created: Dec 2002; Modified Jun 2020
+
+  Test integer relational operators
+@@
+
+package p09csx
+func main() {
+    var i1 int;
+    var i2 int;
+    var b1 bool;
+    var b2 bool;
+    var b3 bool;
+    var b4 bool;
+    var b5 bool;
+    var b6 bool;
+    print "Testing program p09csx\n";
+    i1 = 10;
+    i2 = ~10;
+    b1 = i1 == i1;
+    b2 = i1 != i1;
+    b3 = i1 <= i1;
+    b4 = i1 < i1;
+    b5 = i1 >= i1;
+    b6 = i1 > i1;
+    print b1, "\t", b2, "\t", b3, "\t", b4, "\n", b5, "\t", b6, "\n";
+    b1 = i1 == i2;
+    b2 = i1 != i2;
+    b3 = i1 <= i2;
+    b4 = i1 < i2;
+    b5 = i1 >= i2;
+    b6 = i1 > i2;
+    print b1, "\t", b2, "\t", b3, "\t", b4, "\n", b5, "\t", b6, "\n";
+} // func main
+// package p09csx
+// vim:filetype=go:	

@@ -1,0 +1,44 @@
+@@ Test 14
+ Created: Dec 2002; Modified Jun 2020
+
+ Checks integer, boolean and relational operators
+
+
+
+@@
+
+package p14csx
+func main() {
+
+     var i1 int;
+    var i2 int;
+    var b1 bool;
+    var b2 bool;
+    print "Testing program p14csx\n";
+    i1 = ~2147483640;
+    i2 = 2147483647;
+    if (((i1 > i2) || (i1 == i2)) || (i2 < i1)) || (i2 != i2) {
+        print "ERROR: Error in relational operators (integer)\n";
+    }
+
+    i1 = i1 * 0;
+    i2 = i2 * 1;
+    b1 = false;
+    b2 = true;
+    b2 = (b1 == true) && (b2 == b1);
+    if b2 {
+        print "ERROR: In boolean expression\n";
+    }
+    b1 = ((i1 < i2) && (i1 == 0)) && false;
+    if b1 {
+        print "ERROR: In boolean/integer expression\n";
+    }
+    i1 = ((1 + 2) * 3) / (4 + 5);
+    i2 = (1 + 2) * (3 / (4 + 5));
+    if (i1 != 1) || (i2 != 0) {
+        print "ERROR: Improper Integer division and associativity\n";
+    }
+    
+} // func main
+// package p14csx
+// vim:filetype=go:	
