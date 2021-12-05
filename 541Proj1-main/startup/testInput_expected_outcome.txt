@@ -1,0 +1,26 @@
+i kentucky 1111 // EST error
+i florida 1112 // EST error
+i kentucky 1113 // EST error
+o  // normal
+i kentucky 1111 // normal
+i florida 1112  // normal
+i kentucky 1113 // Duplicate error
+d // dump output -> {florida=(florida:1112), kentucky=(kentucky:1111)}
+g texas // not found
+g florida // found
+l kentucky // found
+l Kentucky // not found
+l florida // found
+c // normal
+c // EST error
+o // normal
+i kentucky 1111 // normal
+i florida 1112  // normal
+i texas 1113 // normal
+o // normal
+i New_York 1114 // normal
+g Kentucky // not found
+l kentucky // not found
+g kentucky // found
+g texas // found
+q // normal

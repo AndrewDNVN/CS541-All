@@ -1,0 +1,88 @@
+java -classpath ./classes P1 < testInput
+Project 1 test driver. Enter any of the following commands:
+  (Command prefixes are allowed)
+	Open (a new scope)
+	Close (innermost current scope)
+	Dump (contents of symbol table)
+	Insert (symbol,integer pair into symbol table)
+	Lookup (lookup symbol in top scope)
+	Global (global lookup of symbol in symbol table)
+	Quit (test driver)
+
+Enter Symbol: 
+Enter value: 
+Empty Symbol Table Exception Thrown and caught. 1
+
+Enter Symbol: 
+Enter value: 
+Empty Symbol Table Exception Thrown and caught. 1
+
+Enter Symbol: 
+Enter value: 
+Empty Symbol Table Exception Thrown and caught. 1
+
+Opened new Scope.
+
+Enter Symbol: 
+Enter value: 
+(kentucky:1111) was added to the Top Scope. 
+Enter Symbol: 
+Enter value: 
+(florida:1112) was added to the Top Scope. 
+Enter Symbol: 
+Enter value: 
+1113 : Duplicate Exception Thrown and caught. Found in the curent scope. 2
+
+
+Contents of the Symbol Table:
+{florida=1112, kentucky=1111}
+
+End of Table 
+Enter Symbol: 
+texas: Was not found in the table.
+Enter Symbol: 
+(florida:1112) Was found in the table. 
+Enter Symbol: 
+(kentucky:1111) Was found in the top Scope. 
+Enter Symbol: 
+Kentucky: Was not found in the top scope.
+Enter Symbol: 
+(florida:1112) Was found in the top Scope. 
+Closed the Top Scope.
+
+Empty Stack Exception Thrown and caught. 0
+
+Closed the Top Scope.
+
+Opened new Scope.
+
+Enter Symbol: 
+Enter value: 
+(kentucky:1111) was added to the Top Scope. 
+Enter Symbol: 
+Enter value: 
+(florida:1112) was added to the Top Scope. 
+Enter Symbol: 
+Enter value: 
+(texas:1113) was added to the Top Scope. 
+Opened new Scope.
+
+Enter Symbol: 
+Enter value: 
+(New_York:1114) was added to the Top Scope. 
+Enter Symbol: 
+Kentucky: Was not found in the table.
+Enter Symbol: 
+kentucky: Was not found in the top scope.
+Enter Symbol: 
+(kentucky:1111) Was found in the table. 
+Enter Symbol: 
+(texas:1113) Was found in the table. 
+
+Contents of the Symbol Table:
+{New_York=1114}
+{florida=1112, texas=1113, kentucky=1111}
+
+End of Table 
+Quitting.
+

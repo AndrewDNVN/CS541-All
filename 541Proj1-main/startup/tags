@@ -1,0 +1,30 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+DuplicateException	DuplicateException.java	/^class DuplicateException extends Exception {}$/;"	c
+EmptySTException	EmptySTException.java	/^class EmptySTException extends Exception {}$/;"	c
+P1	P1.java	/^class P1 {$/;"	c
+Symb	Symb.java	/^   Symb(String n) { name = n;}$/;"	m	class:Symb
+Symb	Symb.java	/^class Symb {$/;"	c
+SymbolTable	SymbolTable.java	/^   SymbolTable() {$/;"	m	class:SymbolTable
+SymbolTable	SymbolTable.java	/^class SymbolTable {$/;"	c
+TestSym	TestSym.java	/^   TestSym(String n, String i) {super(n); value = i;}$/;"	m	class:TestSym
+TestSym	TestSym.java	/^class TestSym extends Symb {$/;"	c
+closeScope	SymbolTable.java	/^   public void closeScope() throws EmptySTException {$/;"	m	class:SymbolTable
+dump	SymbolTable.java	/^void dump(PrintStream ps) {$/;"	m	class:SymbolTable
+globalLookup	SymbolTable.java	/^public Symb globalLookup(String s) throws EmptySTException {$/;"	m	class:SymbolTable
+insert	SymbolTable.java	/^   public void insert(String name, Symb s) throws EmptySTException, DuplicateException {$/;"	m	class:SymbolTable
+localLookup	SymbolTable.java	/^   public Symb localLookup(String s) throws EmptySTException {$/;"	m	class:SymbolTable
+main	P1.java	/^ public static void main(String args[]){$/;"	m	class:P1
+name	Symb.java	/^   private String name;$/;"	f	class:Symb	file:
+name	Symb.java	/^   public String name() {return name;}$/;"	m	class:Symb
+openScope	SymbolTable.java	/^   public void openScope() {$/;"	m	class:SymbolTable
+symbol_table_global	SymbolTable.java	/^   private LinkedList<HashMap<String, Symb>> symbol_table_global;$/;"	f	class:SymbolTable	file:
+toString	Symb.java	/^   public String toString() {return name;}$/;"	m	class:Symb
+toString	SymbolTable.java	/^ public String toString() {$/;"	m	class:SymbolTable
+toString	TestSym.java	/^   public String toString() {return "("+name()+":"+String.valueOf(value)+")";}$/;"	m	class:TestSym
+value	TestSym.java	/^   private String value;$/;"	f	class:TestSym	file:
+value	TestSym.java	/^   public String value() {return value;}$/;"	m	class:TestSym

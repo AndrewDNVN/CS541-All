@@ -1,0 +1,1 @@
+class EmptySTException extends Exception {}
