@@ -1,0 +1,100 @@
+@@ Tests multi-line comments and proper tracking
+@ @ This is test input for the scanner. This is by Andrew Donovan for CS 541
+@
+@
+@	The scanner should start on line 10 col 4 with Id This
+
+
+
+
+@@ This should print at line 10 last col number should be 59
+
+
+
+  () [] = ; + - * / == != && || <> <= >= , ! {} : // test symbols, single comment, and white space
+
+bool break char const continue else for func if int package print read return var // test RW in lower case
+
+BOOL BREAK CHAR CONST CONTINUE ELSE FOR FUNC IF INT PACKAGE PRINT READ RETURN VAR // test RW in upper case
+
+bOoL BrEaK ChAr cOnSt cOnTiNuE ElSe fOr fUnC If iNt pAcKaGe pRiNt rEaD ReTuRn vAr // test RW in alternating case
+
+true false // Boolean literal lower case
+
+TRUE FALSE // Boolean literal upper case
+
+tRuE fAlSe // Boolean literal alternating case
+
+This is a set of ID of Letters // ID letter test
+
+ID_of Letters_And Underscores____ // ID letter and underscore test
+
+ID_33_of_Numbers_UnderScores_and_Letters A_34 B_45 // ID letter, underscore, and numbers test
+
+@@
+
+
+The next output should be 1 @ line 35 col 1
+
+@@
+
+1 2 3 // small int literals
+
+~1 ~2 ~3 // small negative int literals
+
+-1 -2 -3 // // small not-negative int literals <= produces two symbols
+
+1000 2000 3000 // larger int literals
+
+~1000 ~2000 ~3000  // larger negative int literals
+
+2147483647 // largest positive value to be stored without error
+
+~2147483648 // largest negative value to be stored without error
+
+// There should be no errors so far
+
+2147483648 	// Max size error
+
+~2147483659 // Minimum size error
+
+~3147483659 // Minimum size error
+
+2147483659 	// Max size error
+
+9999999999 	// larger Max size error
+
+~9999999999 // larger Minimum size error
+
+// String check
+
+"This is one small string."
+
+"  \\  \\t \\n" // all of these should display as one
+
+" This quote is still in the string \" " // this is one string
+
+" This tic is still in the string \' " // this is another correct string
+
+" \x" // Illegal String error
+
+" 1  // Unclosed String Error
+
+// Char Checks
+
+'a' 'b' '1' '3' '&' // normal 
+
+'\t' // tab
+'\n' // newline
+'\'' // ' 
+'\\' // special allowed
+
+'\x' // illegal
+'\"'
+'\\t'
+
+' this is an unclosed char error
+
+^@#$@#$%@%$#%@#$% // Generic errors
+
+END_ON_LINE_100_COL_1
