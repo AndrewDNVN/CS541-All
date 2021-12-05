@@ -1,0 +1,524 @@
+/***
+ *
+ * This is a Java CUP Specification For CSX-lite, a Small Subset
+ * of The CSX Language,  Prepared by Charles Fischer.
+ *
+ ***/
+
+ // Has now been expanded to include the CSX Go.
+ 
+/* Preliminaries to set up and use the scanner.  */
+
+import java_cup.runtime.*;
+import java.util.*;
+
+parser code {:
+ public void syntax_error(Symbol cur_token)
+     {
+      report_error("CSX syntax error at line: "+ String.valueOf(((CSXToken)cur_token.value).linenum) + " colnum: " + String.valueOf(((CSXToken)cur_token.value).colnum) + ". ", null);
+     }
+:};
+
+init with {:             :};
+scan with {: return Scanner.next_token(); :};
+
+/* Terminals (tokens returned by the scanner). */
+
+// This list comes from project 2 sym.java with minor changes
+
+terminal CSXIdentifierToken        IDENTIFIER;
+
+
+  terminal CSXToken SEMI;          // ;
+  terminal CSXToken L_PAREN;       // (
+  terminal CSXToken R_PAREN;       // )
+  terminal CSXToken L_BRACE;       // {
+  terminal CSXToken R_BRACE;       // }
+  terminal CSXToken PLUS;          // +
+  terminal CSXToken MINUS;         // - 
+  terminal CSXToken ASG;           // =
+  terminal CSXToken STAR;          // *
+  terminal CSXToken COMMA;         // ,
+  terminal CSXToken NOT;           // !
+  terminal CSXToken L_BRACK;       // [  
+  terminal CSXToken R_BRACK;       // ]    
+  terminal CSXToken COLON;         // :
+  terminal CSXToken L_THAN;        // <
+  terminal CSXToken G_THAN;        // > 
+  terminal CSXToken SLASH;         // / 
+
+  // two position special
+
+  terminal CSXToken D_EQUAL;       // ==
+  terminal CSXToken NOT_EQUAL;     // !=
+  terminal CSXToken D_AND;         // &&
+  terminal CSXToken OR;            // ||
+  terminal CSXToken L_THAN_EQ;     // <=
+  terminal CSXToken G_THAN_EQ;     // >=
+
+  // Reserved Words
+
+  terminal CSXToken Rw_BOOL;          // BOOL 
+  terminal CSXToken Rw_BREAK;         // BREAK
+  terminal CSXToken Rw_CHAR;          // CHAR
+  terminal CSXToken Rw_CONST;         // CONST
+  terminal CSXToken Rw_CONTINUE;      // CONTINUE
+  terminal CSXToken Rw_ELSE;          // ELSE
+  terminal CSXToken Rw_FOR;           // FOR
+  terminal CSXToken Rw_FUNC;          // FUNC
+  terminal CSXToken Rw_IF;            // IF
+  terminal CSXToken Rw_INT;           // INT Decl
+  terminal CSXToken Rw_PACKAGE;       // PACKAGE
+  terminal CSXToken Rw_PRINT;         // PRINT
+  terminal CSXToken Rw_RETURN;        // RETURN
+  terminal CSXToken Rw_VAR;           // VAR
+  terminal CSXToken Rw_READ;          // READ
+    
+  // literals
+
+  terminal CSXIntLitToken           INT_LIT;        // Integer literal
+  terminal CSXCharLitToken          CHAR_LIT;       // Char literal
+  terminal CSXStringLitToken        STRING_LIT;     // String literal
+  
+
+  terminal CSXToken                 Rw_BOOL_LIT_T;     // Boolean literal True
+  terminal CSXToken                 Rw_BOOL_LIT_F;     // Boolean literal False
+
+  // Error Terminals have been removed; 
+  // not needed in actual implementation a
+  // simple error will suffice.
+
+
+/* Non terminals */
+non terminal programNode        program;
+
+non terminal varDeclsNode       varDecls_UNK;
+
+non terminal funcDeclsNode      funcDecls;
+
+non terminal declNode           varDecl;
+non terminal declNode           varDeclCONST;
+
+non terminal funcDeclNode       funcDecl;
+
+non terminal typeNode           type;
+non terminal typeNode           optType;
+
+non terminal argDeclsNode       formals;
+non terminal argDeclsNode       someFormals;
+non terminal argDeclNode        formalDecl;
+
+non terminal blockNode          block;
+
+non terminal nameNode          name;
+
+non terminal readNode           readlist;
+non terminal displayNode        printlist;
+
+non terminal stmtsNode          stmts;
+non terminal stmtNode           stmt;
+
+non terminal argsNode           actuals;
+non terminal argsNode           someActuals;
+
+non terminal exprNode           optionalSemi;
+
+non terminal exprNode           term;
+
+non terminal exprNode           factor;
+
+non terminal exprNode           pri;
+
+non terminal exprNode           unary;
+non terminal exprNode           unit;
+
+non terminal exprNode           expr;
+non terminal identNode          ident;
+
+// Precedences
+precedence left     D_AND, OR;
+precedence nonassoc D_EQUAL, NOT_EQUAL, L_THAN, G_THAN, L_THAN_EQ, G_THAN_EQ;
+precedence left     PLUS, MINUS;
+precedence left     STAR, SLASH;
+precedence right    NOT;
+
+
+start with program;
+
+// Slight change in formatting and structure. 
+
+program     ::=Rw_PACKAGE:p ident:id varDecls_UNK:v_S funcDecls:f_S 
+            
+            {:
+                RESULT = new programNode(id, v_S, f_S, p.linenum, p.colnum);
+
+            :}
+            ;
+// _UNK because it is not know which particular var is being defined
+varDecls_UNK    ::= Rw_VAR varDecl:v varDecls_UNK:v_S
+                {:
+                    RESULT = new varDeclsNode(v, v_S, v.linenum, v.colnum);
+                :}
+                | Rw_CONST varDeclCONST:v varDecls_UNK:v_S
+                {:
+                    RESULT = new varDeclsNode(v, v_S, v.linenum, v.colnum);
+                :}
+                |   //lambda
+                {:
+                    RESULT = new nullVarDeclsNode();
+                :}
+                ;
+
+varDecl     ::= ident:i type:t SEMI
+            {:
+                RESULT = new varDeclNode(i, t, exprNode.NULL, i.linenum, i.colnum);
+            :}
+            |   ident:i ASG expr:e SEMI
+            {:
+                RESULT = new varDeclNode(i, typeNode.NULL, e, i.linenum, i.colnum);
+
+            :} 
+            |   ident:i type:t L_BRACK INT_LIT:v R_BRACK SEMI
+            {:
+                RESULT = new arrayDeclNode(i, t, new intLitNode(v.intValue, v.linenum, v.colnum), i.linenum, i.colnum);
+
+            :}
+            ;
+// used to keep things a bit neater
+varDeclCONST ::=    ident:i ASG expr:e SEMI
+                    {:
+                        RESULT = new constDeclNode(i, e, i.linenum, i.colnum);
+                    :}            
+                    ;
+
+// using the Rw to help define the difference
+funcDecls   ::=  Rw_FUNC funcDecl:f funcDecls:f_S
+            {:
+                RESULT = new funcDeclsNode(f, f_S, f.linenum, f.colnum);
+            :} 
+            |   //lambda
+            {:
+                RESULT = new nullFuncDeclsNode();
+            :}          
+            ;
+
+
+
+funcDecl    ::= ident:i L_PAREN formals:f_S R_PAREN optType:o block:b
+            {:
+                RESULT = new funcDeclNode(i, f_S, o, b, i.linenum, i.colnum);
+            :}
+            ;
+
+formals     ::= someFormals:sF_s
+            {:
+                RESULT = sF_s;
+            :}
+            | //lambda
+            {:
+                RESULT = new nullArgDeclsNode();
+            :}
+            ;
+
+someFormals ::= formalDecl:fD
+            {:
+                RESULT = new argDeclsNode(fD, argDeclsNode.NULL, fD.linenum, fD.colnum);
+            :}
+            | formalDecl:fD COMMA someFormals:sF_S
+            {:
+                RESULT = new argDeclsNode(fD, sF_S, fD.linenum, fD.colnum);
+            :} 
+            ;
+
+formalDecl  ::=ident:i type:t
+            {:
+                RESULT = new valArgDeclNode(i, t, i.linenum, i.colnum);
+            :}
+            | ident:i L_BRACK R_BRACK type:t
+            {:
+                RESULT = new arrayArgDeclNode(i, t, i.linenum, i.colnum);
+            :}
+            ;
+
+optType     ::= type:t
+            {:
+                RESULT = t; // load it in
+            :}
+            | //lambda
+            {:
+                RESULT = new nullTypeNode();
+            :}
+            ;
+
+stmts       ::= stmt:s stmts:s_S
+            {:
+                RESULT = new stmtsNode(s, s_S, s.linenum, s.colnum);
+            :}
+            | //lambda
+            {:
+                RESULT = new nullStmtsNode();
+            :}
+            ;
+
+stmt        ::= Rw_IF expr:e block:b
+            {:
+                RESULT = new ifNode(e, b, e.linenum, e.colnum);
+            :}
+            | Rw_IF expr:e block:b1 Rw_ELSE block:b2
+            {:
+                RESULT = new ifThenNode(e, b1, b2, e.linenum, e.colnum);
+            :}
+            | Rw_FOR expr:e block:b
+            {:
+                RESULT = new forNode(e, b, e.linenum, e.colnum);
+            :}
+            | name:n ASG expr:e SEMI
+            {:
+                RESULT = new asgNode(n, e, n.linenum, n.colnum);
+            :}
+            | Rw_READ:i readlist:r_L SEMI
+            {:
+                RESULT = r_L; // being a statement it just flows on
+            :}
+            | Rw_PRINT:i printlist:p_L SEMI
+            {:
+                RESULT = p_L; // being a statement it just flows on
+            :}
+            | name:n L_PAREN actuals:a_S R_PAREN SEMI
+            {:
+                RESULT = new callNode(n, a_S, n.linenum, n.colnum);
+            :}
+            | Rw_RETURN:i SEMI
+            {:
+                RESULT = new returnNode(exprNode.NULL, i.linenum, i.colnum);
+            :}
+            | Rw_RETURN:i expr:e SEMI
+            {:
+                RESULT = new returnNode(e, i.linenum, i.colnum);
+            :}
+            | Rw_BREAK:i ident:id SEMI
+            {:
+                RESULT = new breakNode(id, i.linenum, i.colnum);
+            :}
+            | Rw_CONTINUE:i ident:id SEMI
+            {:
+                RESULT = new continueNode(id, i.linenum, i.colnum);
+            :}
+            | block:b
+            {:
+                RESULT = b;
+            :} 
+            //| ident:i COLON Rw_FOR expr:e block:b //work in progress
+            //{:
+            //   RESULT = new  // work in progress
+            //:} 
+            ;
+
+block       ::= L_BRACE varDecls_UNK:v_S stmts:s_S R_BRACE optionalSemi
+            {:
+                RESULT = new blockNode(v_S, s_S, v_S.linenum, v_S.colnum);
+            :}
+            ;
+
+optionalSemi    ::= SEMI:s
+                {:
+                    // just load in a ';' 
+                    RESULT = new charLitNode(';', s.linenum, s.colnum);
+
+                :}
+                | //lambda
+                {:
+                    RESULT = new nullExprNode();
+                :}
+                ;
+
+type        ::= Rw_INT:t
+            {:  
+                RESULT = new intTypeNode(t.linenum, t.colnum);
+            :}
+            | Rw_CHAR:t
+            {:
+                RESULT = new charTypeNode(t.linenum, t.colnum);
+            :}
+            | Rw_BOOL:t
+            {:
+                RESULT = new boolTypeNode(t.linenum, t.colnum);
+            :}
+            ;
+
+actuals     ::= someActuals:sA_S
+            {:
+                RESULT = new argsNode(exprNode.NULL, sA_S, sA_S.linenum, sA_S.colnum);
+            :}
+            | //lambda
+            {:
+                RESULT = new nullArgsNode();
+            :}
+            ;
+
+someActuals ::= expr:e COMMA someActuals:sA_S 
+            {:
+                RESULT = new argsNode(e, sA_S, e.linenum, e.colnum);
+            :}
+            | expr:e
+            {:
+                RESULT = new argsNode(e, argsNode.NULL, e.linenum, e.colnum);
+            :}
+            ;
+
+readlist    ::= name:n COMMA readlist:r_L
+            {:
+                RESULT = new readNode(n, r_L, n.linenum, n.colnum);
+            :}
+            | name:n
+            {:
+                RESULT = new readNode(n, readNode.NULL, n.linenum, n.colnum);
+            :}
+            ;
+printlist    ::= expr:e COMMA printlist:p_L
+            {:
+                RESULT = new displayNode(e, p_L, e.linenum, e.colnum);
+            :}
+            | expr:e
+            {:
+                RESULT = new displayNode(e, displayNode.NULL, e.linenum, e.colnum);
+            :}
+            ;
+
+expr        ::= expr:e OR term:tm
+            {:  
+                RESULT = new binaryOpNode(e, sym.OR, tm, e.linenum, e.colnum);
+            :}
+            | expr:e D_AND term:tm
+            {:
+                RESULT = new binaryOpNode(e, sym.D_AND, tm, e.linenum, e.colnum);
+            :}
+            | term:tm
+            {:
+                RESULT = new binaryOpNode(tm, -1, exprNode.NULL, tm.linenum, tm.colnum);
+            :}
+            ;
+
+term        ::= factor:f L_THAN factor:g
+            {:
+                RESULT = new binaryOpNode(f, sym.L_THAN, g, f.linenum, f.colnum);
+            :}
+            | factor:f G_THAN factor:g
+            {:
+                RESULT = new binaryOpNode(f, sym.G_THAN, g, f.linenum, f.colnum);
+            :}
+            | factor:f L_THAN_EQ factor:g
+            {:
+                RESULT = new binaryOpNode(f, sym.L_THAN_EQ, g, f.linenum, f.colnum);
+            :}
+             | factor:f G_THAN_EQ factor:g
+            {:
+                RESULT = new binaryOpNode(f, sym.G_THAN_EQ, g, f.linenum, f.colnum);
+            :}
+             | factor:f D_EQUAL factor:g
+            {:
+                RESULT = new binaryOpNode(f, sym.D_EQUAL, g, f.linenum, f.colnum);
+            :}
+            | factor:f NOT_EQUAL factor:g
+            {:
+                RESULT = new binaryOpNode(f, sym.NOT_EQUAL, g, f.linenum, f.colnum);
+            :}
+            | factor:f
+            {:
+                RESULT = new binaryOpNode(f, -1, exprNode.NULL, f.linenum, f.colnum);
+            :}
+            ;
+
+factor      ::= factor:f PLUS pri:p
+            {:
+                RESULT = new binaryOpNode(f, sym.PLUS, p, f.linenum, f.colnum);
+            :}
+            | factor:f MINUS pri:p
+            {:
+                RESULT = new binaryOpNode(f, sym.MINUS, p, f.linenum, f.colnum);
+            :}
+            | pri:p
+            {:
+                RESULT = p;
+            :}
+            ;
+
+pri         ::= pri:p STAR unary:u
+            {:
+                RESULT = new binaryOpNode(p, sym.STAR, u, p.linenum, p.colnum);
+            :}
+            | pri:p SLASH unary:u
+            {:
+                RESULT = new binaryOpNode(p, sym.SLASH, u, p.linenum, p.colnum);
+            :}
+            | unary:u
+            {:
+                RESULT = u;
+            :}
+            ;
+
+unary       ::= NOT unary:u
+            {:
+                RESULT = new unaryOpNode(sym.NOT, u, u.linenum, u.colnum);
+            :}
+            | type:t L_PAREN expr:e R_PAREN
+            {:
+                RESULT = new castNode(t, e, t.linenum, t.colnum);
+            :}
+            | unit:un
+            {:
+                RESULT = un;
+            :}
+            ;
+
+unit        ::= name:n
+            {:
+                RESULT = n;
+            :}
+            |   name:n L_PAREN actuals:a_S R_PAREN
+            {:
+                RESULT = new fctCallNode(n, a_S, n.linenum, n.colnum);
+            :}
+            |   INT_LIT:i
+            {:
+                RESULT = new intLitNode(i.intValue , i.linenum, i.colnum);
+            :}
+            |   CHAR_LIT:i
+            {:
+                RESULT = new charLitNode(i.charValue, i.linenum, i.colnum);
+            :}
+            |   STRING_LIT:i
+            {:
+                RESULT = new strLitNode(i.stringText, i.linenum, i.colnum);
+            :}
+            |   Rw_BOOL_LIT_T:i
+            {:
+                RESULT = new trueNode(i.linenum, i.colnum);
+            :}
+            |   Rw_BOOL_LIT_F:i
+            {:
+                RESULT = new falseNode(i.linenum, i.colnum);
+            :}
+            |   L_PAREN expr:e R_PAREN
+            {:
+                RESULT = e;
+            :}
+            ;
+
+name        ::= ident:id
+            {:
+                RESULT = new nameNode(id, exprNode.NULL, id.linenum, id.colnum);
+            :}
+            |   ident:id L_BRACK expr:e R_BRACK
+            {:
+                RESULT = new nameNode(id, e, id.linenum, id.colnum);
+            :}
+            ; 
+
+ident       ::= IDENTIFIER:i
+            {: 
+
+                 RESULT = new identNode(i.identifierText, i.linenum, i.colnum);
+            :}   
+            ;
+

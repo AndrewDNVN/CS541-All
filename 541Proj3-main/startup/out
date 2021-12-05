@@ -1,0 +1,285 @@
+
+CSX_go program parsed correctly.
+Here is its unparsing:
+11: program test
+16: var a int;
+17: var b = ((0));
+18: var c int [1];
+19: const d = ((2));
+20: const j = ((true));
+21: const k = ((false));
+22: const l = ((t));
+23: const m = (("foo"));
+24: var jV = ((true));
+25: var kV = ((false));
+26: var lV = ((t));
+27: var mV = (("foo"));
+28: var g bool;
+29: var h char;
+32: func alpha () int
+-1: { 
+-1: }
+
+36: func bravo () char
+38: { 
+38: 	var e int;
+39: 	var f = ((3));
+38: }
+
+43: func charlie (a int) bool
+45: { 
+45: 	var e int;
+46: 	var f = ((3));
+45: }
+
+50: func delta (a int , b int) int
+52: { 
+52: 	var e int;
+53: 	var f = ((3));
+52: }
+
+56: func echo () 
+58: { 
+58: 	var e int;
+59: 	var f = ((3));
+58: }
+
+62: func foxtrot () 
+-1: { 
+-1: }
+
+66: func golf (d [ ] int) 
+-1: { 
+-1: }
+
+70: func hotel (a int , d [ ] int) 
+-1: { 
+-1: }
+
+74: func india (a int , d [ ] int) char
+-1: { 
+-1: }
+
+78: func juliett (a int , d [ ] int , d int) bool
+-1: { 
+-1: }
+
+82: func kilo (a int , d [ ] int , d int) bool
+84: { 
+84: 	var e int;
+85: 	var f = ((3));
+84: }
+
+88: func mike () 
+93: { 
+93: 	var aM int;
+94: 	var bM = ((0));
+95: 	var cM int [1];
+96: 	const dM = ((2));
+97: 	const jM = ((true));
+98: 	const kM = ((false));
+99: 	const lM = ((t));
+100: 	const mM = (("foo"));
+101: 	var jVM = ((true));
+102: 	var kVM = ((false));
+103: 	var lVM = ((t));
+104: 	var mVM = (("foo"));
+105: 	var gM bool;
+106: 	var hM char;
+93: }
+
+109: func november (a int , b [ ] int) int
+114: { 
+114: 	var aN int;
+115: 	var bN = ((0));
+116: 	var cN int [1];
+117: 	const dN = ((2));
+118: 	const jN = ((true));
+119: 	const kN = ((false));
+120: 	const lN = ((t));
+121: 	const mN = (("foo"));
+122: 	var jVN = ((true));
+123: 	var kVN = ((false));
+124: 	var lVN = ((t));
+125: 	var mVN = (("foo"));
+126: 	var gN bool;
+127: 	var hN char;
+114: }
+
+130: func oscar (a int) int
+-1: { 
+133:	if (((((a == 1)))))
+
+135: 		{ 
+135: 			var e int;
+136: 			var f = ((3));
+135: 		}
+
+-1: }
+
+140: func papa () 
+143: { 
+143: 	var a int;
+145:	if (((((b != 2)))))
+
+146: 		{ 
+146: 			var aN int;
+147: 			var bN = ((0));
+148: 			var cN int [1];
+149: 			const dN = ((2));
+150: 			const jN = ((true));
+151: 			const kN = ((false));
+152: 			const lN = ((t));
+153: 			const mN = (("foo"));
+154: 			var jVN = ((true));
+155: 			var kVN = ((false));
+156: 			var lVN = ((t));
+157: 			var mVN = (("foo"));
+158: 			var gN bool;
+159: 			var hN char;
+146: 		}
+	else 
+162: 		{ 
+162: 			var aN int;
+163: 			var bN = ((0));
+164: 			var cN int [1];
+165: 			const dN = ((2));
+166: 			const jN = ((true));
+167: 			const kN = ((false));
+168: 			const lN = ((t));
+169: 			const mN = (("foo"));
+170: 			var jVN = ((true));
+171: 			var kVN = ((false));
+172: 			var lVN = ((t));
+173: 			var mVN = (("foo"));
+174: 			var gN bool;
+175: 			var hN char;
+162: 		}
+
+143: }
+
+181: func quebec (g bool) char
+-1: { 
+184:	 for ((((a <= 2))))		
+186: { 
+186: 	var e int;
+187: 	var f = ((3));
+186: }
+
+-1: }
+
+191: func romeo () bool
+-1: { 
+195:	 for ((((a <= 2))))		
+-1: { 
+197:	if (((((b != 2)))))
+
+198: 		{ 
+198: 			var aN int;
+199: 			var bN = ((0));
+200: 			var cN int [1];
+201: 			const dN = ((2));
+202: 			const jN = ((true));
+203: 			const kN = ((false));
+204: 			const lN = ((t));
+205: 			const mN = (("foo"));
+206: 			var jVN = ((true));
+207: 			var kVN = ((false));
+208: 			var lVN = ((t));
+209: 			var mVN = (("foo"));
+210: 			var gN bool;
+211: 			var hN char;
+213:			if (((((c >= f)))))
+
+214: 				{ 
+214: 					var a = (("This is a lot of tabs."));
+216:					d = ((c));
+
+214: 				}
+			else 
+-1: 				{ 
+221:					e = ((c));
+
+223:					if (((((g <= j)))))
+
+-1: 						{ 
+225:							g = ((true));
+
+-1: 						}
+
+-1: 				}
+
+198: 		}
+	else 
+231: 		{ 
+231: 			var aN int;
+232: 			var bN = ((0));
+233: 			var cN int [1];
+234: 			const dN = ((2));
+235: 			const jN = ((true));
+236: 			const kN = ((false));
+237: 			const lN = ((t));
+238: 			const mN = (("foo"));
+239: 			var jVN = ((true));
+240: 			var kVN = ((false));
+241: 			var lVN = ((t));
+242: 			var mVN = (("foo"));
+243: 			var gN bool;
+244: 			var hN char;
+231: 		}
+
+-1: }
+
+-1: }
+
+251: func sierra () int
+-1: { 
+255:	(col) 9-> read: a
+256:	(col) 9-> read: a
+256:	(col) 12-> read: b
+258:	(col) 10-> print : ((a == 1))
+259:	(col) 10-> print : ((b == 2))
+259:	(col) 18-> print : ((c != 3))
+-1: }
+
+263: func tango () int
+-1: { 
+266:	a ( (((b)) && (v)) );
+268:	a ( (((b)) || (v)) );
+270:	a ( ((b < v)) );
+272:	a ( ((b > v)) );
+274:	a ( ((c <= v)) );
+276:	a ( ((c >= v)) );
+278:	a ( ((c == v)) );
+280:	a ( ((a != v)) );
+282:	a ( (((a + B))) );
+284:	a ( (((a - B))) );
+286:	a ( (((a * B))) );
+288:	a ( (((a / B))) );
+290:	a ( ((( !  B))) );
+-1: }
+
+294: func uniform () bool
+-1: { 
+297:	a ( ((int((((1)) || (b))))) );
+301:	D = (((a + (b * c))));
+
+303:	E = (((a - (b / c))));
+
+305:	F = ((((a * b) - c)));
+
+307:	G = (((((a == (b * C))) || (d <= (e - f)))));
+
+309:	a ( ((d)) );
+311:	b ( (("This is a test.")) );
+313:	c ( ((42)) );
+-1: }
+
+317: func victor () 
+-1: { 
+319:	break a;
+
+321:	continue b;
+
+-1: }
+ 11: {EOF}

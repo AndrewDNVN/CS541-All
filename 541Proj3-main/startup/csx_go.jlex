@@ -1,0 +1,730 @@
+/*  Expand this file into your solution for project 2 */
+// Now used in project 3 with minor fixes
+
+import java_cup.runtime.*;
+
+class CSXToken {
+	int linenum;
+	int colnum;
+	CSXToken(int line,int col) {
+		linenum=line;
+		colnum=col;
+	}
+}
+
+class CSXIntLitToken extends CSXToken {
+	int intValue;
+	CSXIntLitToken(int val,int line,int col) {
+	   super(line,col);
+	   intValue=val; 
+	};
+}
+
+class CSXIdentifierToken extends CSXToken {
+	String identifierText;
+	CSXIdentifierToken(String text,int line,int col) {
+		super(line,col);
+		identifierText=text;
+	}
+}
+
+class CSXCharLitToken extends CSXToken {
+	char charValue;
+	CSXCharLitToken(char val,int line,int col) {
+		super(line,col);
+		charValue=val;
+	}
+}
+
+class CSXStringLitToken extends CSXToken {
+	String stringText; // Full text of string literal,
+                          //  including quotes & escapes
+	CSXStringLitToken(String text,int line,int col) {
+		super(line,col);
+		stringText=text;
+	}
+}
+
+// This class is used to track line and column numbers
+// Feel free to change to extend it
+class Pos {
+	static int  linenum = 1; /* maintain this as line number current
+                                 token was scanned on */
+	static int  colnum = 1; /* maintain this as column number current
+                                 token began at */
+	static int  line = 1; /* maintain this as line number after
+					scanning current token  */
+	static int  col = 1; /* maintain this as column number after
+					scanning current token  */
+	static void setpos() { // set starting position for current token
+		linenum = line;
+		colnum = col;
+	}
+}
+
+
+/*
+class Symbol { 
+	public int sym;
+	public CSXToken value;
+	public Symbol(int tokenType, CSXToken theToken) {
+		sym = tokenType;
+		value = theToken;
+	}
+}
+*/
+
+%%
+
+// Defining Macros to use below
+
+DIGIT				= [0-9]
+LETTER			= [a-zA-Z]
+CHARS				= ( [\040\041\043-\046\050-\133\135-\176] | \\t | \\n | \\\\ )
+// takes out ", ', \ , and Del
+
+// Using white list as opposed to not the unprintable chars as suggested in the project spec.
+// It made more sense to me this way.
+
+// Reserved words -> Rw_
+// case insensitive for all letters in the RW
+
+// I wanted to use '%ignorecase' but had issues when running
+// the current implementation works as intended.
+
+Rw_BOOL 				= [bB][oO][oO][lL]
+Rw_BREAK				= [bB][rR][eE][aA][kK]
+Rw_CHAR 				= [cC][hH][aA][rR]
+Rw_CONST				= [cC][oO][nN][sS][tT]
+Rw_CONTINUE			= [cC][oO][nN][tT][iI][nN][uU][eE]
+Rw_ELSE 				= [eE][lL][sS][eE]
+Rw_FOR					= [fF][oO][rR]
+Rw_FUNC					=	[fF][uU][nN][cC]
+Rw_IF 					= [iI][fF]
+Rw_INT 					= [iI][nN][tT]
+Rw_PACKAGE			= [pP][aA][cC][kK][aA][gG][eE]
+Rw_PRINT 				= [pP][rR][iI][nN][tT]
+Rw_READ					= [rR][eE][aA][dD]
+Rw_RETURN 			= [rR][eE][tT][uU][rR][nN]
+Rw_VAR					= [vV][aA][rR]
+Rw_BOOL_LIT_T 	=	[tT][rR][uU][eE]
+Rw_BOOL_LIT_F		= [fF][aA][lL][sS][eE]
+
+COLON 			= ":"
+//^ unsure of why this fixes it 
+// I am aware that the colon is used for concatenation but this is the single char and not '::=' . 
+// I am using code from : https://jflex.de/manual.html#Example
+// near the bottom of the page under the line "The corresponding JFlex code (MiniScanner.jflex) could be"
+// and above "This small example reads an input like".
+
+
+// Other Token Definitions
+
+TILDE 			= "\~"
+// ^ is an escaped character; so store it as a macro with a \ to escape it.
+
+// Dealing with multi-line comment
+
+MULTICOMMENT_INT = @@(@?[^@])*@@
+
+// Find first "@@" then deal with the inner content of the comment.
+// This is done via the query which allows for there to be zero or one "@".
+// Which is next to a character class that allows for anything but another "@".
+// This repeats until "@@" is found.
+// This took a while to figure out.
+
+// String Literal
+
+STRINGLIT 	= \"({CHARS}|(\\\")|(\\'))*\"
+
+// First find a " then see what is next, it can be any of the printable Char's.
+// or escaped quote (which requires three \ to be able to see), or escaped tic.
+// Repeat until another Quote is found.
+// This literal has error states that catch unclosed and other illegal strings.
+
+// Char Literal
+
+CHARLIT = ' ({CHARS} | (\\')) ' 
+
+// First find a ' then see what is next, it can be any of the printable Char's.
+// or escaped quote (which requires three \ to be able to see), or escaped tic.
+// Only char is allowed.
+// This literal has an error state that catches illegal chars.
+
+
+%type Symbol
+%eofval{
+  return new Symbol(sym.EOF, new CSXToken(0,0));
+%eofval}
+
+
+%%
+
+// single position special
+
+";"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.SEMI, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"("	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.L_PAREN, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+")"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.R_PAREN, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"{"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.L_BRACE, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+
+"}"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.R_BRACE, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"+"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.PLUS, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"-"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.MINUS,
+		new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"="	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.ASG, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"*"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.STAR, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+","	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.COMMA, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"!"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.NOT, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"["	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.L_BRACK, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"]"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.R_BRACK, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+':'	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.R_BRACK, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"]"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.R_BRACK, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"]"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.R_BRACK, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+{COLON} { 
+	// Explained above.
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.COLON, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"<"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.L_THAN, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+">"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.G_THAN, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+"/"	{
+	Pos.setpos();
+	Pos.col += 1;
+	return new Symbol(sym.SLASH, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+// two-position special
+
+"=="	{
+	Pos.setpos();
+	Pos.col += 2;
+	return new Symbol(sym.D_EQUAL, new CSXToken(Pos.linenum,Pos.colnum));
+}
+"!="	{
+	Pos.setpos();
+	Pos.col += 2;
+	return new Symbol(sym.NOT_EQUAL, new CSXToken(Pos.linenum,Pos.colnum));
+}
+"&&"	{
+	Pos.setpos();
+	Pos.col += 2;
+	return new Symbol(sym.D_AND, new CSXToken(Pos.linenum,Pos.colnum));
+}
+"||"	{
+	Pos.setpos();
+	Pos.col += 2;
+	return new Symbol(sym.OR, new CSXToken(Pos.linenum,Pos.colnum));
+}
+"<="	{
+	Pos.setpos();
+	Pos.col += 2;
+	return new Symbol(sym.L_THAN_EQ, new CSXToken(Pos.linenum,Pos.colnum));
+}
+">="	{
+	Pos.setpos();
+	Pos.col += 2;
+	return new Symbol(sym.G_THAN_EQ, new CSXToken(Pos.linenum,Pos.colnum));
+}
+
+// Reserved Words
+
+{Rw_BOOL} {
+	// BOOL
+	Pos.setpos();
+	Pos.col += 4;
+	return new Symbol(sym.Rw_BOOL, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_BREAK} {
+	// BREAK
+	Pos.setpos();
+	Pos.col += 5;
+	return new Symbol(sym.Rw_BREAK, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_CHAR} {
+	// CHAR
+	Pos.setpos();
+	Pos.col += 4;
+	return new Symbol(sym.Rw_CHAR, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_CONST} {
+	// CONST
+	Pos.setpos();
+	Pos.col += 5;
+	return new Symbol(sym.Rw_CONST, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_CONTINUE} {
+	// CONTINUE
+	Pos.setpos();
+	Pos.col += 8;
+	return new Symbol(sym.Rw_CONTINUE, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_ELSE} {
+	// ELSE
+	Pos.setpos();
+	Pos.col += 4;
+	return new Symbol(sym.Rw_ELSE, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_FOR} {
+	// FOR
+	Pos.setpos();
+	Pos.col += 3;
+	return new Symbol(sym.Rw_FOR, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_FUNC} {
+	// FUNC
+	Pos.setpos();
+	Pos.col += 4;
+	return new Symbol(sym.Rw_FUNC, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_IF} {
+	// IF
+	Pos.setpos();
+	Pos.col += 2;
+	return new Symbol(sym.Rw_IF, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_INT} {
+	// INT
+	Pos.setpos();
+	Pos.col += 3;
+	return new Symbol(sym.Rw_INT, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_PACKAGE} {
+	// PACKAGE
+	Pos.setpos();
+	Pos.col += 7;
+	return new Symbol(sym.Rw_PACKAGE, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_PRINT} {
+	// PRINT
+	Pos.setpos();
+	Pos.col += 5;
+	return new Symbol(sym.Rw_PRINT, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_RETURN} {
+	// RETURN
+	Pos.setpos();
+	Pos.col += 6;
+	return new Symbol(sym.Rw_RETURN, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_VAR} {
+	// VAR
+	Pos.setpos();
+	Pos.col += 3;
+	return new Symbol(sym.Rw_VAR, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_READ} {
+	// VAR
+	Pos.setpos();
+	Pos.col += 4;
+	return new Symbol(sym.Rw_READ, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_BOOL_LIT_T} {
+	// Boolean literal True
+	Pos.setpos();
+	Pos.col += 4;
+	return new Symbol(sym.Rw_BOOL_LIT_T, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+{Rw_BOOL_LIT_F} {
+	// Boolean literal false
+	Pos.setpos();
+	Pos.col += 5;
+	return new Symbol(sym.Rw_BOOL_LIT_F, new CSXToken(Pos.linenum, Pos.colnum));
+}
+
+
+// ID
+
+{LETTER}({LETTER}|{DIGIT}|_)* {
+	
+	// ID: must start with letter can be any length 
+	// can be any combination of numbers chars and underscores.
+	Pos.setpos(); 
+	Pos.col += yytext().length();
+
+	return new Symbol(sym.IDENTIFIER, new CSXIdentifierToken(yytext(), Pos.linenum,Pos.colnum));
+
+}
+
+// literals
+
+
+{TILDE}?{DIGIT}+	{
+	// Integer Literal
+	Pos.setpos(); 
+	Pos.col += yytext().length();
+
+	Double int_hold;
+	// Double used to deal with overflow values.
+	// called int_hold to help with remember what is contained.
+
+	if(yytext().startsWith("~")){
+
+		// Check for negative
+
+		int_hold = Double.valueOf(yytext().replace('~', '-'));
+		
+		// Using the .replace with chars.
+
+	}
+
+	else
+	{ 
+		int_hold = Double.valueOf(yytext());
+	}
+
+	// Now check for Max or Minimum size errors
+
+	Integer int_ret = int_hold.intValue();
+
+	// Now holding the correctly signed value
+	// but check with the value stored in the double.
+	// This is done if neither comparison is needed.
+
+
+	if (int_hold > Integer.MAX_VALUE){
+
+		// Max size found
+
+		int_ret = Integer.MAX_VALUE;
+		// set the int return value
+
+		return new Symbol(sym.INT_LIT, new CSXIntLitToken(int_ret, Pos.linenum,Pos.colnum));
+		// Return an error symbol but still return per the parameter.
+
+
+	}
+
+	if (int_hold < Integer.MIN_VALUE){
+
+		// Minimum size found
+
+		int_ret = Integer.MIN_VALUE;
+		// set the int return value
+
+		return new Symbol(sym.INT_LIT, new CSXIntLitToken(int_ret, Pos.linenum,Pos.colnum));
+		// Return an error symbol but still return per the parameter.
+
+	}
+
+	return new Symbol(sym.INT_LIT, new CSXIntLitToken(int_ret, Pos.linenum,Pos.colnum));
+	// Value falls into normal area.
+}
+
+
+{STRINGLIT} {
+	
+	// String Literal 
+	// REGEX explained above.
+	Pos.setpos();
+	Pos.col += yytext().length();
+
+
+	return new Symbol(sym.STRING_LIT, new CSXStringLitToken(yytext(), Pos.linenum, Pos.colnum));
+}
+
+{CHARLIT} {
+
+	// Char literal
+	// REGEX explained above.
+
+	Pos.setpos();
+	Pos.col += yytext().length(); // Because it could be more than three symbols long 
+																// to the scanner.
+	char char_tmp = '$'; // Set to $ to stand out on errors.
+
+	if (yytext().length() == 3 ){
+
+		char_tmp = yytext().charAt(1); // Normal Chars
+	}
+
+	else {
+
+			// Escaped Chars
+			if(yytext().equals("'\\t'")){
+				char_tmp = '\t';
+			}
+
+			else if (yytext().equals("'\\n'")){
+				char_tmp = '\n';
+			}
+
+			else if (yytext().equals("'\\''")){
+				char_tmp = '\'';
+				// Other special that does not need a print.
+			}
+
+			else {
+				char_tmp = '\\';
+				// Other special that does not need a print.
+			}
+
+
+		}
+
+	return new Symbol(sym.CHAR_LIT, new CSXCharLitToken(char_tmp, Pos.linenum, Pos.colnum));
+	// Normal case.
+}
+
+
+// Comment and Error section
+
+"//"(.)*(\n) {
+		
+		// Single line comment
+		Pos.setpos();
+		Pos.line += 1;
+		Pos.col = 1; // Only occurs after two slashes
+
+		// Print Diagnostic 
+
+		// Commented out for future use if needed
+
+		//System.out.print("Single line comment was found at " + Pos.linenum + ":" + Pos.colnum +".\n");
+
+}
+
+{MULTICOMMENT_INT} {
+		
+		// multi-line comment
+
+		String comment_internal = yytext(); // store the internals of the comment in a string
+
+		Pos.col 	= comment_internal.substring(comment_internal.lastIndexOf('\n')).length();
+// grader: generates an exception on @@ comment in middle of a line. -4
+		
+		Pos.line 	+= comment_internal.length() - comment_internal.replace("\n" ,"").length();
+
+		// I am doing this form because I wanted to avoid using loops. 
+		// This should be faster than looping; granted it is less directly readable.
+			// Explanation: 
+				// Pos.col: create a substring that starts after the last newline char
+				// then find the length of that substring and save that to the column value.
+
+				// Pos.line: find the total length of the comment
+				// then replace all newline chars with null
+				// take that total length from the original length
+				// and add that to the current line value.
+
+}
+
+\' ([^\n\'])* \' {
+	
+	// Catches invalid Chars
+
+	// Find start tic, then look for anything other than a new line and the close tic.
+	// Repeat until close tic is found.
+	// This will only take chars that fall past the definition above.
+
+
+	Pos.setpos(); 
+	Pos.col += yytext().length(); 
+
+	// Go to the end of this line and return that position as it is just 
+	// illegal and valid symbols can be found beyond it.
+
+	return new Symbol(sym.error, new CSXStringLitToken(yytext(), Pos.linenum, Pos.colnum));
+
+}
+
+\' ([^\n\'])*\n {
+	
+	// Catches unclosed Chars
+
+	// Find start tic, then look for anything other than a new line and the close tic.
+	// Repeat until newline is found.
+	// This will only take chars that fall past the definition above.
+
+	Pos.setpos(); 
+	Pos.col += yytext().length(); 
+	Pos.line += 1; // ignore this whole line
+
+	// Go to the end of this line and return that position as it is just 
+	// illegal and valid symbols can be found beyond it.
+
+	return new Symbol(sym.error, new CSXStringLitToken(yytext().replace("\n", ""), Pos.linenum, Pos.colnum));
+	
+	// Needed to remove the new line to keep with formatting on the return.
+	// Using strings to avoid using the NULL Char.
+
+}
+
+
+\"({CHARS}|(\\\")|(\\'))*\n {
+	
+	// Catches unclosed strings 
+	// Same as STRINGLIT Macro but missing the close parenthesis.
+	// So look for a string based off of the macro, and then
+	// repeat; because this is below the definition for a string
+	// this will only take strings that fall past that are not illegal 
+	// but just missing a quote at the end.
+
+	// Only works for strings on one line, but that is a given 
+	// parameter that strings do not cross newlines.
+	
+	Pos.setpos();
+	Pos.col += yytext().length();
+
+	int line_tmp = Pos.linenum-1; // Return where the start of the string is.
+	int col_tmp = Pos.col;
+
+	Pos.linenum += 1; 	// But still update the scanner of the new position;
+	Pos.col = 1; 		// So that it can move past this. 
+									// Because the scanner does not know what content is 
+									// legal and supposed to be in the string.
+
+	return new Symbol(sym.error, new CSXStringLitToken(yytext().replace("\n", ""), line_tmp, col_tmp));
+
+	// Needed to remove the new line to keep with formatting on the return.
+	// Using strings to avoid using the NULL Char.
+
+}
+
+
+// New line and white space
+	// At the bottom to make sure if any other checks 
+	// are passed before here.
+
+
+"\n" {
+
+	// newline
+	Pos.line += 1;
+	Pos.col = 1;
+}
+
+(" ")|("\t") {
+	// Whitespace
+	Pos.col += 1;
+}
+
+	// Catch All
+	// If anything falls to here return a generic error message with the contents of the item.
+
+
+. {
+	// Catches invalid tokens
+	// uses the string literal to keep the whole input for debugging
+	Pos.setpos();
+	Pos.col += 1;
+
+	// Print Diagnostic 
+
+	// commented out for future use if needed
+	
+	//System.out.print("What was found: " + yytext() + ".");
+
+	//System.out.print(" It was found at " + Pos.linenum + ":" + Pos.colnum +".\n");
+	
+	return new Symbol(sym.error, new CSXStringLitToken(yytext(), Pos.linenum, Pos.colnum));
+
+	// Returns the Generic error.
+}
+
